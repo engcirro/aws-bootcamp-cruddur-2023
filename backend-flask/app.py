@@ -25,10 +25,24 @@ from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProces
 #X-ray
 from aws_xray_sdk.core import xray_recorder
 from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
+#CouldWatch_log
+import watchtower
+import logging
+from time import strftime
 
-xray_url = os.getenv("AWS_XRAY_URL")
-xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
-#XRayMiddleware(app, xray_recorder)
+# Configuring Logger to Use CloudWatch
+#LOGGER = logging.getLogger(__name__)
+#LOGGER.setLevel(logging.DEBUG)
+#console_handler = logging.StreamHandler()
+#cw_handler = watchtower.CloudWatchLogHandler(log_group='cruddur')
+#LOGGER.addHandler(console_handler)
+#LOGGER.addHandler(cw_handler)
+#LOGGER.info("test log")
+
+
+#xray_url = os.getenv("AWS_XRAY_URL")
+#xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
+
 #HoneyCamp .....
 # Initialize tracing and an exporter that can send data to Honeycomb
 provider = TracerProvider()
@@ -43,7 +57,7 @@ tracer = trace.get_tracer(__name__)
 
 app = Flask(__name__)
 #X-ray
-XRayMiddleware(app, xray_recorder)
+#XRayMiddleware(app, xray_recorder)
 #HoneyCamp .....
 # Initialize automatic instrumentation with Flask
 
@@ -60,6 +74,12 @@ cors = CORS(
   allow_headers="content-type,if-modified-since",
   methods="OPTIONS,GET,HEAD,POST"
 )
+
+#@app.after_request
+#def after_request(response):
+ #   timestamp = strftime('[%Y-%b-%d %H:%M]')
+  #  LOGGER.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
+   # return response
 
 @app.route("/api/message_groups", methods=['GET'])
 def data_message_groups():
