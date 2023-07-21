@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 
 // [TODO] Authenication
 import { Auth } from 'aws-amplify';
-//import Cookies from 'js-cookie'
 
 export default function SigninPage() {
 
@@ -14,27 +13,21 @@ export default function SigninPage() {
   const [errors, setErrors] = React.useState('');
 
   const onsubmit = async (event) => {
-    event.preventDefault();
     setErrors('')
-    try {
-        const { user } = await Auth.signUp({
-          username: email,
-          password: password,
-          attributes: {
-              name: name,
-              email: email,
-              preferred_username: username,
-          },
-          autoSignIn: { // optional - enables auto sign in after user is confirmed
-              enabled: true,
+    event.preventDefault();
+    //try {
+      Auth.signIn(email, password)
+        .then(user => {
+          console.log('user',user)
+          localStorage.setItem("access_token", user.signInUserSession.accessToken.jwtToken)
+          window.location.href = "/"
+        })
+        .catch(error => { 
+          if (error.code == 'UserNotConfirmedException') {
+            window.location.href = "/confirm"
           }
-        });
-        console.log(user);
-        window.location.href = `/confirm?email=${email}`
-    } catch (error) {
-        console.log(error);
-        setErrors(error.message)
-    }
+          setErrors(error.message)
+         });
     return false
   }
       
