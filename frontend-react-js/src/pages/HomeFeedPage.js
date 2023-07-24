@@ -55,9 +55,9 @@ const checkAuth = async () => {
       })
   })
   .catch((err) => console.log(err));
-};
-
-  React.useEffect(()=>{
+ };
+ 
+ React.useEffect(()=>{
     //prevents double call
     if (dataFetchedRef.current) return;
     dataFetchedRef.current = true;

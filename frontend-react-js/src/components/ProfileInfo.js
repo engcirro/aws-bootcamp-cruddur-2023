@@ -12,20 +12,16 @@ export default function ProfileInfo(props) {
   const click_pop = (event) => {
     setPopped(!popped)
   }
-  
 
   const signOut = async () => {
-    console.log('signOut')
-    // [TODO] Authenication
-    const signOut = async () => {
-      try {
-          await Auth.signOut({ global: true });
-          window.location.href = "/"
-      } catch (error) {
-          console.log('error signing out: ', error);
-      }
-    }
-
+  try {
+      await Auth.signOut({ global: true });
+      window.location.href = "/"
+  } catch (error) {
+      console.log('error signing out: ', error);
+  }
+  }
+    
   const classes = () => {
     let classes = ["profile-info-wrapper"];
     if (popped == true){
@@ -49,5 +45,4 @@ export default function ProfileInfo(props) {
       </div>
     </div>
   )
-}
 }
